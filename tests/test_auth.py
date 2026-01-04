@@ -32,4 +32,38 @@ def test_signup_with_short_password(client):
     }, follow_redirects=True)
     
     assert b"Password must be at least 7 characters" in res.data
+    
+    
+def test_signup_with_short_firstname(client):
+    res = client.post("/sign-up", data={
+        "email": "test2@example.com",
+        "firstName": "K",
+        "password1": "123",
+        "password2": "123"
+    }, follow_redirects=True)
+    
+    assert b"First name must be at least 2 characters." in res.data
+  
+    
+def test_signup_with_mismatch_password(client):
+    res = client.post("/sign-up", data={
+        "email": "test2@example.com",
+        "firstName": "Keaton",
+        "password1": "123",
+        "password2": "1234"
+    }, follow_redirects=True)
+    
+    assert b"Passwords do not match." in res.data
+    
+def test_signup_with_short_email(client):
+    res = client.post("/sign-up", data={
+        "email": "@gm",
+        "firstName": "Keaton",
+        "password1": "123",
+        "password2": "1234"
+    }, follow_redirects=True)
+    
+    assert b"Email must be at least 4 characters." in res.data
+    
+
  
