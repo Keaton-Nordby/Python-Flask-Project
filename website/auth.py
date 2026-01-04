@@ -26,7 +26,7 @@ def login():
         else:
             flash('Incorrect password, try again.', category="error")
     
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
@@ -56,11 +56,13 @@ def sign_up():
             )
             db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True)
+
+            login_user(new_user, remember=True)
+
             flash('Account created successfully!', category='success')
             return redirect(url_for('views.home'))
 
-    return render_template("sign_up.html")
+    return render_template("sign_up.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
